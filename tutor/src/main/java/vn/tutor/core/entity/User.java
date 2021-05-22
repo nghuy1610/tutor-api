@@ -8,8 +8,10 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 public class User extends BaseEntity {
-    private String username;
-    private String password;
     private String email;
+    private String password;
     private String phoneNumber;
+    private String resetPasswordKey;
+    private String firstName;
+    private String lastName;
 }

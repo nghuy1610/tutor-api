@@ -4,13 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.data.annotation.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+@EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
 @Setter
