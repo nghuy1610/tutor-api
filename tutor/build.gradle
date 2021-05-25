@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.4.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id "org.flywaydb.flyway" version "7.9.1"
 }
 
 group = 'vn.tutor'
@@ -32,6 +33,7 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.modelmapper:modelmapper:2.4.3'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'
@@ -44,4 +46,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+flyway {
+    url = 'jdbc:mysql://localhost:3306/tutor'
+    user = 'dev-tutor'
+    password = 'dev123'
 }
