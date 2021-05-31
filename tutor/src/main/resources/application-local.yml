@@ -30,11 +30,12 @@ spring:
 
 # Flyway
   flyway:
-    locations: classpath://db/migration
+    locations: classpath:db/migration
+    baselineOnMigrate: true
 
 # Actuator
 management:
   endpoints:
     web:
       exposure:
-        include: *
+        include: "*"

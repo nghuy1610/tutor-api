@@ -1,4 +1,4 @@
-package vn.tutor.core.controller;
+package vn.tutor.core.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +11,14 @@ import vn.tutor.core.dto.response.UserResponseDto;
 import vn.tutor.core.service.UserService;
 
 @RestController
+@RequestMapping("/api/admin/users")
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
-public class UserController {
+public class AdminUserController {
     private final UserService userService;
 
-    @PostMapping(path="", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<UserResponseDto> registerUser(@RequestBody UserRequestDto requestDto) {
-        UserResponseDto user = userService.createAndRetrieveTutorUser(requestDto);
-        return ResponseEntity.ok(user);
+    @PostMapping(path = "", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<UserResponseDto> createAndRetrieveUser(@RequestBody UserRequestDto requestDto) {
+         UserResponseDto responseDto = userService.createAndRetrieveOperatorUser(requestDto);
+         return ResponseEntity.ok(responseDto);
     }
 }

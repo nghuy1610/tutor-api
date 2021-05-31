@@ -7,7 +7,6 @@ public class UserRequestDto {
     private String email;
     private String password;
     private String phoneNumber;
-    private String resetPasswordKey;
     private String firstName;
     private String lastName;
 }
