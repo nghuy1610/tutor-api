@@ -22,7 +22,7 @@ public class BaseEntity {
     private String id = UUID.randomUUID().toString();
 
     @Version
-    private int version;
+    private Integer version;
 
     @CreatedBy
     private String createdBy;
