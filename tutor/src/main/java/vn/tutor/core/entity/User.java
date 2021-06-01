@@ -16,8 +16,6 @@ public class User extends BaseEntity {
     private String firstName;
     private String lastName;
 
-    @ManyToMany
-    @JoinTable(name = "user_permission", joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="permission_id"))
-    List<Permission> permission;
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    List<UserPermission> userPermissions;
 }

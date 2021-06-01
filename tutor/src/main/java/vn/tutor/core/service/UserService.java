@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PermissionService permissionService;
+    private final UserPermissionService userPermissionService;
     private final Mapper mapper;
 
     public UserResponseDto createAndRetrieveTutorUser(UserRequestDto requestDto) {
@@ -30,7 +30,7 @@ public class UserService {
 
     private UserResponseDto createAndRetrieveUser(UserRequestDto requestDto, PermissionType permissionType) {
         User user = mapper.map(requestDto, User.class);
-        user.setPermission(List.of(permissionService.findPermissionByType(permissionType)));
+        user.setUserPermissions(userPermissionService.createUserPermissionWithAuthoritiesForUser(List.of(permissionType), user));
         userRepository.save(user);
         return mapper.map(user, UserResponseDto.class);
     }

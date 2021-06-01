@@ -19,8 +19,6 @@ public class Tutor extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private VerificationStatus verificationStatus;
 
-    @ManyToMany
-    @JoinTable(name = "tutor_specialty", joinColumns = @JoinColumn(name="tutor_id"),
-            inverseJoinColumns = @JoinColumn(name="specialty_id"))
-    private List<Specialty> specialties;
+    @OneToMany
+    private List<TutorSpecialty> tutorSpecialties;
 }
