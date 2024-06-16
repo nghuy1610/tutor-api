@@ -6,7 +6,7 @@ import vn.tutor.core.entity.User;
 import vn.tutor.core.entity.UserPermission;
 import vn.tutor.core.enums.PermissionType;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 

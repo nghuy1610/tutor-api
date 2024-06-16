@@ -1,6 +1,14 @@
 # Server
 server:
   port: 8181
+  servlet:
+    session:
+      timeout: 5m
+      cookie:
+        http-only: true
+        max-age: -1
+      tracking-modes: cookie
+
 
 # Data source
 spring:

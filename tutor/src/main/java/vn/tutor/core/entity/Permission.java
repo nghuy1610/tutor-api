@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import vn.tutor.core.enums.PermissionType;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity
 @Getter

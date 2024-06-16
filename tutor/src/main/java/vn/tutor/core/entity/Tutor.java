@@ -5,7 +5,7 @@ import lombok.Setter;
 import vn.tutor.core.enums.Gender;
 import vn.tutor.core.enums.VerificationStatus;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity

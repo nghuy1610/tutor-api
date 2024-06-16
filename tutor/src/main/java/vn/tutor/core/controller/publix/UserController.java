@@ -1,4 +1,4 @@
-package vn.tutor.core.controller;
+package vn.tutor.core.controller.publix;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import vn.tutor.core.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/api/public/users")
 public class UserController {
     private final UserService userService;
 
