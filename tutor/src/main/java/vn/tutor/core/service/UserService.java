@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.tutor.core.dto.request.LoginRequestDto;
 import vn.tutor.core.dto.request.UserRequestDto;
+import vn.tutor.core.dto.response.LoginResponseDto;
 import vn.tutor.core.dto.response.UserResponseDto;
 import vn.tutor.core.entity.User;
 import vn.tutor.core.enums.PermissionType;
@@ -14,6 +15,8 @@ import vn.tutor.core.mapper.Mapper;
 import vn.tutor.core.repository.UserRepository;
 
 import java.util.List;
+import vn.tutor.core.security.AuthToken;
+import vn.tutor.core.security.JwtUtils;
 
 @Service
 @Transactional
@@ -23,6 +26,7 @@ public class UserService {
     private final UserPermissionService userPermissionService;
     private final Mapper mapper;
     private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
     public UserResponseDto createAndRetrieveTutorUser(UserRequestDto requestDto) {
         return createAndRetrieveUser(requestDto, PermissionType.TUTOR);
@@ -39,9 +43,10 @@ public class UserService {
         return mapper.map(user, UserResponseDto.class);
     }
 
-    public UserResponseDto login(LoginRequestDto loginRequestDto) {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
         User user = userRepository.findByEmail(loginRequestDto.getEmail());
-        return mapper.map(user, UserResponseDto.class);
+        List<String> authorities = user.getUserPermissions().stream().map(up -> up.getPermission().getPermissionType().name()).toList();
+        return new LoginResponseDto(jwtUtils.generateToken(new AuthToken(user.getId(), user.getEmail(), authorities)), authorities);
     }
 }

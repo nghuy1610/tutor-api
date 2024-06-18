@@ -3,7 +3,11 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id "org.flywaydb.flyway" version "10.14.0"
+    id "idea"
 }
+
+apply plugin: 'java'
+apply plugin: 'idea'
 
 group = 'vn.tutor'
 version = '0.0.1-SNAPSHOT'
@@ -37,12 +41,15 @@ dependencies {
 //    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.modelmapper:modelmapper:3.2.0'
+    implementation 'com.auth0:java-jwt:4.4.0'
 
     compileOnly 'org.projectlombok:lombok'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'com.mysql:mysql-connector-j:8.4.0'
+    runtimeOnly 'org.flywaydb:flyway-mysql:10.15.0'
+
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
@@ -60,4 +67,10 @@ flyway {
     url = 'jdbc:mysql://localhost:3306/tutor'
     user = 'dev-tutor'
     password = 'dev123'
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+    }
 }

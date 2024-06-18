@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,7 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
     public static final String[] WHITE_LISTS = {
-        "/api/public/**"
+        "/api/users/login", "/api/users"
     };
     private final UserDetailsService customUserDetailsService;
 
@@ -39,7 +38,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configureSecurity(HttpSecurity http) throws Exception {
       http
           .httpBasic(AbstractHttpConfigurer::disable)
           .csrf(AbstractHttpConfigurer::disable)
@@ -57,7 +56,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager configure(HttpSecurity http, PasswordEncoder bCryptPasswordEncoder) throws Exception {
+    public AuthenticationManager configureAuthentication(HttpSecurity http, PasswordEncoder bCryptPasswordEncoder) throws Exception {
         var builder = http.getSharedObject(AuthenticationManagerBuilder.class);
         builder.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
         return builder.build();

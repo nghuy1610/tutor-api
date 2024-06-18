@@ -1,7 +1,8 @@
 package vn.tutor.core.enums;
 
 public enum PermissionType {
-    ADMIN,
+    SUPER_ADMIN,
+    OPERATOR,
     TUTOR,
-    OPERATOR
+    STUDENT
 }

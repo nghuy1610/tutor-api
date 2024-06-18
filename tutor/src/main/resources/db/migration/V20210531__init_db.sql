@@ -1,4 +1,4 @@
-create table user
+create table if not exists `user`
 (
     id                 varchar(40) not null primary key,
     version            int(4),
@@ -14,20 +14,30 @@ create table user
     last_name          varchar(16)
 );
 
-create table permission
+create table if not exists permission
 (
     id   varchar(40) not null primary key,
-    type varchar(16)
+    version            int(4),
+    created_by         varchar(64),
+    updated_by         varchar(64),
+    created_on         timestamp,
+    updated_on         timestamp,
+    permission_type varchar(16)
 );
 
-create table user_permission
+create table if not exists user_permission
 (
-    id            varchar(40) not null primary key,
+    id                 varchar(40) not null primary key,
+    version            int(4),
+    created_by         varchar(64),
+    updated_by         varchar(64),
+    created_on         timestamp,
+    updated_on         timestamp,
     user_id       varchar(40),
     permission_id varchar(40)
 );
 
-create table tutor
+create table if not exists tutor
 (
     id                  varchar(40) not null primary key,
     version             int(4),
@@ -39,10 +49,10 @@ create table tutor
     introduction        varchar(1028),
     address             varchar(256),
     gender              varchar(8),
-    verification_status varchar(16),
+    verification_status varchar(16)
 );
 
-create table specialty
+create table if not exists specialty
 (
     id         varchar(40) not null primary key,
     version    int(4),
@@ -53,7 +63,7 @@ create table specialty
     name       varchar(64)
 );
 
-create table tutor_specialty
+create table if not exists tutor_specialty
 (
     id           varchar(40) not null primary key,
     version      int(4),
@@ -64,3 +74,7 @@ create table tutor_specialty
     tutor_id     varchar(40),
     specialty_id varchar(40)
 );
+
+insert into permission (id, permission_type) values (uuid(), "SUPER_ADMIN");
+insert into permission (id, permission_type) values (uuid(), "TUTOR");
+insert into permission (id, permission_type) values (uuid(), "STUDENT");
