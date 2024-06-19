@@ -1,5 +1,6 @@
 package vn.tutor.core.entity;
 
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -22,21 +23,27 @@ import java.util.UUID;
 @Getter
 @Setter
 public class BaseEntity {
+    @Column(name = "id")
     @Id
     private String id = UUID.randomUUID().toString();
 
+    @Column(name = "version")
     @Version
     private Integer version;
 
+    @Column(name = "created_by")
     @CreatedBy
     private String createdBy;
 
+    @Column(name = "updated_by")
     @LastModifiedBy
     private String updatedBy;
 
+    @Column(name = "created_on")
     @CreatedDate
     private ZonedDateTime createdOn;
 
+    @Column(name = "updated_on")
     @LastModifiedDate
     private ZonedDateTime updatedOn;
 

@@ -3,6 +3,7 @@ package vn.tutor.core.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.tutor.core.dto.request.LoginRequestDto;
@@ -27,19 +28,35 @@ public class UserService {
     private final Mapper mapper;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final TutorService tutorService;
+    private final StudentService studentService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserResponseDto createAndRetrieveTutorUser(UserRequestDto requestDto) {
-        return createAndRetrieveUser(requestDto, PermissionType.TUTOR);
+    public UserResponseDto createAndRetrieveUser(UserRequestDto requestDto) {
+        if (PermissionType.isNormalUserPermission(requestDto.getRole())) {
+            return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.getRole()));
+        } else {
+            throw new IllegalArgumentException("Invalid role: " + requestDto.getRole());
+        }
     }
 
-    public UserResponseDto createAndRetrieveOperatorUser(UserRequestDto requestDto) {
-        return createAndRetrieveUser(requestDto, PermissionType.OPERATOR);
+    public UserResponseDto createAndRetrieveOperator(UserRequestDto requestDto) {
+        if (PermissionType.isOperatorPermission(requestDto.getRole())) {
+            return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.getRole()));
+        } else {
+            throw new IllegalArgumentException("Invalid role: " + requestDto.getRole());
+        }
     }
 
     private UserResponseDto createAndRetrieveUser(UserRequestDto requestDto, PermissionType permissionType) {
         User user = mapper.map(requestDto, User.class);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserPermissions(userPermissionService.createUserPermissionWithAuthoritiesForUser(List.of(permissionType), user));
         userRepository.save(user);
+        switch (permissionType) {
+            case TUTOR -> tutorService.createTutor(user);
+            case STUDENT -> studentService.createStudent(user);
+        }
         return mapper.map(user, UserResponseDto.class);
     }
 

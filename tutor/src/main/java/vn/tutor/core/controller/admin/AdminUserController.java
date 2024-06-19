@@ -18,7 +18,7 @@ public class AdminUserController {
 
     @PostMapping(path = "", produces = "application/json", consumes = "application/json")
     public ResponseEntity<UserResponseDto> createAndRetrieveUser(@RequestBody UserRequestDto requestDto) {
-         UserResponseDto responseDto = userService.createAndRetrieveOperatorUser(requestDto);
+         UserResponseDto responseDto = userService.createAndRetrieveOperator(requestDto);
          return ResponseEntity.ok(responseDto);
     }
 }

@@ -1,5 +1,6 @@
 package vn.tutor.core.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +50,11 @@ public class SecurityConfig {
           .authorizeHttpRequests(registry -> registry.requestMatchers(WHITE_LISTS).permitAll()
               .anyRequest().authenticated())
           .userDetailsService(customUserDetailsService)
-          .exceptionHandling(Customizer.withDefaults())
+          .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
+              .authenticationEntryPoint(
+                  (request, response, authException) ->
+                      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+              ))
           .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
               .maximumSessions(1));
       return http.build();

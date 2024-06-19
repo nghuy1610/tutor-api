@@ -20,7 +20,7 @@ public class UserController {
 
     @PostMapping(path="", produces = "application/json", consumes = "application/json")
     public ResponseEntity<UserResponseDto> registerUser(@RequestBody UserRequestDto requestDto) {
-        UserResponseDto user = userService.createAndRetrieveTutorUser(requestDto);
+        UserResponseDto user = userService.createAndRetrieveUser(requestDto);
         return ResponseEntity.ok(user);
     }
 
