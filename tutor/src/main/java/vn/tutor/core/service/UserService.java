@@ -62,7 +62,7 @@ public class UserService {
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
-        User user = userRepository.findByEmail(loginRequestDto.getEmail());
+        User user = userRepository.findFullUserByEmail(loginRequestDto.getEmail());
         List<String> authorities = user.getUserPermissions().stream().map(up -> up.getPermission().getPermissionType().name()).toList();
         return new LoginResponseDto(jwtUtils.generateToken(new AuthToken(user.getId(), user.getEmail(), authorities)), authorities);
     }

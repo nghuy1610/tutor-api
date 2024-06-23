@@ -1,5 +1,6 @@
 package vn.tutor.core.security;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,10 +16,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findFullUserByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        return new CustomUserDetails(user);
+        List<String> authorities = user.getUserPermissions().stream()
+            .map(up -> up.getPermission().getPermissionType().name())
+            .toList();
+        return new CustomUserDetails(user.getEmail(), user.getPassword(), authorities);
     }
 }

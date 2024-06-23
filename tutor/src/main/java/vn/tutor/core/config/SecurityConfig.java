@@ -2,6 +2,10 @@ package vn.tutor.core.config;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,22 +20,23 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import vn.tutor.core.security.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private static final Logger LOGGER = LogManager.getLogger(SecurityConfig.class);
     public static final String[] WHITE_LISTS = {
         "/api/users/login", "/api/users"
     };
     private final UserDetailsService customUserDetailsService;
-
-    public SecurityConfig(UserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
-    }
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -52,11 +57,14 @@ public class SecurityConfig {
           .userDetailsService(customUserDetailsService)
           .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
               .authenticationEntryPoint(
-                  (request, response, authException) ->
-                      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+                  (request, response, authException) -> {
+                      LOGGER.error(ExceptionUtils.getStackTrace(authException));
+                      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                  }
               ))
           .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
               .maximumSessions(1));
+      http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
       return http.build();
     }
 

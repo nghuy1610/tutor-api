@@ -8,19 +8,21 @@ import vn.tutor.core.enums.PermissionType;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
+import vn.tutor.core.repository.UserPermissionRepository;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserPermissionService {
     private final PermissionService permissionService;
+    private final UserPermissionRepository userPermissionRepository;
 
-    List<UserPermission> createUserPermissionWithAuthoritiesForUser(List<PermissionType> permissionTypes, User user) {
-        return permissionTypes.stream()
+    public List<UserPermission> createUserPermissionWithAuthoritiesForUser(List<PermissionType> permissionTypes, User user) {
+        List<UserPermission> userPermissions = permissionTypes.stream()
                 .map(permissionType -> UserPermission.builder().user(user)
                         .permission(permissionService.findPermissionByType(permissionType)).build())
-                .collect(Collectors.toList());
+                .toList();
+        user.setUserPermissions(userPermissions);
+        return userPermissionRepository.saveAll(userPermissions);
     }
-
 }

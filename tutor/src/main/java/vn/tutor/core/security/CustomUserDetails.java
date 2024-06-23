@@ -1,31 +1,27 @@
 package vn.tutor.core.security;
 
+import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import vn.tutor.core.entity.User;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
-public record CustomUserDetails(User user) implements UserDetails {
+public record CustomUserDetails(String email, String password, List<String> authorities) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getUserPermissions().stream()
-            .map(
-                userPermission -> new SimpleGrantedAuthority(userPermission.getPermission().getPermissionType().name()))
-            .collect(Collectors.toList());
+        return authorities.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return email;
     }
 
     @Override

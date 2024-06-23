@@ -90,6 +90,7 @@ create table if not exists student
     verification_status varchar(16)
     );
 
-insert into permission (id, permission_type) values (uuid(), "SUPER_ADMIN");
-insert into permission (id, permission_type) values (uuid(), "TUTOR");
-insert into permission (id, permission_type) values (uuid(), "STUDENT");
+insert into permission (id, created_on, created_by, permission_type) values (uuid(), now(), "SYSTEM", "SUPER_ADMIN");
+insert into permission (id, created_on, created_by, permission_type) values (uuid(), now(), "SYSTEM", "OPERATOR");
+insert into permission (id, created_on, created_by, permission_type) values (uuid(), now(), "SYSTEM", "TUTOR");
+insert into permission (id, created_on, created_by, permission_type) values (uuid(), now(), "SYSTEM", "STUDENT");
