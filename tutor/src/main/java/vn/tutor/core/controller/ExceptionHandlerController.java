@@ -1,16 +1,51 @@
 package vn.tutor.core.controller;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import vn.tutor.core.dto.ErrorDto;
+import vn.tutor.core.exception.ErrorCode;
 
-import java.util.List;
-
-@ControllerAdvice
+@RestControllerAdvice
 public class ExceptionHandlerController {
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<List<ErrorDto>> handleException(Exception ex) {
-        return ResponseEntity.badRequest().body(List.of(ErrorDto.builder().errorMessage(ex.getMessage()).build()));
-    }
+
+  private static final Logger LOGGER = LogManager.getLogger(ExceptionHandlerController.class);
+
+  @ExceptionHandler(AuthenticationException.class)
+  public ResponseEntity<ErrorDto> handleException(AuthenticationException ex) {
+    LOGGER.error("Authentication exception, ex = {}", ExceptionUtils.getStackTrace(ex));
+    return constructErrorResponse(ErrorCode.ERROR_001);
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<ErrorDto> handleException(AccessDeniedException ex) {
+    LOGGER.error("Authorisation exception, ex = {}", ExceptionUtils.getStackTrace(ex));
+    return constructErrorResponse(ErrorCode.ERROR_002);
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorDto> handleValidationException(MethodArgumentNotValidException ex) {
+    LOGGER.error("Validation exception, ex = {}", ExceptionUtils.getStackTrace(ex));
+    return constructErrorResponse(ErrorCode.ERROR_003, ex);
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ErrorDto> handleException(Exception ex) {
+    LOGGER.error("No specific handler exception, ex = {}", ExceptionUtils.getStackTrace(ex));
+    return constructErrorResponse(ErrorCode.ERROR_000);
+  }
+
+  private ResponseEntity<ErrorDto> constructErrorResponse(ErrorCode errorCode) {
+    return ResponseEntity.status(errorCode.getHttpStatusCode()).body(new ErrorDto(errorCode));
+  }
+
+  private ResponseEntity<ErrorDto> constructErrorResponse(ErrorCode errorCode, MethodArgumentNotValidException ex) {
+    return ResponseEntity.status(errorCode.getHttpStatusCode()).body(new ErrorDto(errorCode, ex));
+  }
 }

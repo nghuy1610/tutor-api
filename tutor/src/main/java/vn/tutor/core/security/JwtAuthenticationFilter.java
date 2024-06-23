@@ -1,12 +1,13 @@
 package vn.tutor.core.security;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+  private static final Logger LOGGER = LogManager.getLogger(JwtAuthenticationFilter.class);
+
   private final JwtUtils jwtUtils;
   private final UserDetailsService customUserDetailsService;
 
@@ -27,17 +30,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     String token = request.getHeader("Authorization");
     if (token != null && token.startsWith("Bearer ")) {
       token = token.substring(7);
-      try {
-        AuthToken authToken = jwtUtils.validateToken(token);
-        UserDetails customUserDetails = customUserDetailsService.loadUserByUsername(authToken.email());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(customUserDetails.getUsername(),
-            customUserDetails.getPassword(), customUserDetails.getAuthorities());
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-          SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-      } catch (JWTVerificationException e) {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JWT Token");
-        return;
+      AuthToken authToken = jwtUtils.validateToken(token);
+      UserDetails customUserDetails = customUserDetailsService.loadUserByUsername(authToken.email());
+      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+          customUserDetails.getUsername(),
+          customUserDetails.getPassword(), customUserDetails.getAuthorities());
+      if (SecurityContextHolder.getContext().getAuthentication() == null) {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
       }
     }
     filterChain.doFilter(request, response);

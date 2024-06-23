@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.tutor.core.dto.request.LoginRequestDto;
-import vn.tutor.core.dto.request.UserRequestDto;
+import vn.tutor.core.dto.request.UserCreationReqDto;
 import vn.tutor.core.dto.response.LoginResponseDto;
 import vn.tutor.core.dto.response.UserResponseDto;
 import vn.tutor.core.entity.User;
@@ -32,7 +32,7 @@ public class UserService {
     private final StudentService studentService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserResponseDto createAndRetrieveUser(UserRequestDto requestDto) {
+    public UserResponseDto createAndRetrieveUser(UserCreationReqDto requestDto) {
         if (PermissionType.isNormalUserPermission(requestDto.getRole())) {
             return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.getRole()));
         } else {
@@ -40,7 +40,7 @@ public class UserService {
         }
     }
 
-    public UserResponseDto createAndRetrieveOperator(UserRequestDto requestDto) {
+    public UserResponseDto createAndRetrieveOperator(UserCreationReqDto requestDto) {
         if (PermissionType.isOperatorPermission(requestDto.getRole())) {
             return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.getRole()));
         } else {
@@ -48,7 +48,7 @@ public class UserService {
         }
     }
 
-    private UserResponseDto createAndRetrieveUser(UserRequestDto requestDto, PermissionType permissionType) {
+    private UserResponseDto createAndRetrieveUser(UserCreationReqDto requestDto, PermissionType permissionType) {
         User user = mapper.map(requestDto, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserPermissions(userPermissionService.createUserPermissionWithAuthoritiesForUser(List.of(permissionType), user));

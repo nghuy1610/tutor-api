@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.tutor.core.dto.request.UserRequestDto;
+import vn.tutor.core.dto.request.UserCreationReqDto;
 import vn.tutor.core.dto.response.UserResponseDto;
 import vn.tutor.core.service.UserService;
 
@@ -20,7 +20,7 @@ public class AdminUserController {
 
     @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     @PostMapping(path = "", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<UserResponseDto> createAndRetrieveUser(@RequestBody @Valid UserRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> createAndRetrieveUser(@RequestBody @Valid UserCreationReqDto requestDto) {
          UserResponseDto responseDto = userService.createAndRetrieveOperator(requestDto);
          return ResponseEntity.ok(responseDto);
     }
