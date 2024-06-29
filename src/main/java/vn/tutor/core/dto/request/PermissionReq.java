@@ -6,6 +6,6 @@ import vn.tutor.core.enums.PermissionType;
 
 @Getter
 @Setter
-public class PermissionRequestDto {
+public class PermissionReq {
     private PermissionType permissionType;
 }

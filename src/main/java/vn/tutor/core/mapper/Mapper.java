@@ -2,6 +2,7 @@ package vn.tutor.core.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.modelmapper.record.RecordModule;
 import org.springframework.stereotype.Component;
 import vn.tutor.core.mapper.entity2dto.UserToUserResponseDto;
 
@@ -14,8 +15,8 @@ public class Mapper {
 
     public Mapper() {
         mapper = new ModelMapper();
+        mapper.registerModule(new RecordModule());
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
         mapper.addMappings(new UserToUserResponseDto());
     }
 

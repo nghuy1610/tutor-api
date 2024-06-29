@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import vn.tutor.core.dto.ErrorDto;
 import vn.tutor.core.exception.ErrorCode;
+import vn.tutor.core.exception.ResourceNotFoundException;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {
@@ -35,6 +36,12 @@ public class ExceptionHandlerController {
     return constructErrorResponse(ErrorCode.ERROR_003, ex);
   }
 
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<ErrorDto> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    LOGGER.error("Resource not found exception, ex = {}", ExceptionUtils.getStackTrace(ex));
+    return constructErrorResponse(ErrorCode.ERROR_004, ex);
+  }
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorDto> handleException(Exception ex) {
     LOGGER.error("No specific handler exception, ex = {}", ExceptionUtils.getStackTrace(ex));
@@ -45,7 +52,7 @@ public class ExceptionHandlerController {
     return ResponseEntity.status(errorCode.getHttpStatusCode()).body(new ErrorDto(errorCode));
   }
 
-  private ResponseEntity<ErrorDto> constructErrorResponse(ErrorCode errorCode, MethodArgumentNotValidException ex) {
+  private ResponseEntity<ErrorDto> constructErrorResponse(ErrorCode errorCode, Exception ex) {
     return ResponseEntity.status(errorCode.getHttpStatusCode()).body(new ErrorDto(errorCode, ex));
   }
 }

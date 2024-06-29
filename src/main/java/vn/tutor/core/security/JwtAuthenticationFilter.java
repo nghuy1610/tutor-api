@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,10 +29,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     String token = request.getHeader("Authorization");
     if (token != null && token.startsWith("Bearer ")) {
       token = token.substring(7);
-      AuthToken authToken = jwtUtils.validateToken(token);
-      UserDetails customUserDetails = customUserDetailsService.loadUserByUsername(authToken.email());
-      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-          customUserDetails.getUsername(),
+      JwtTokenInfo jwtTokenInfo = jwtUtils.validateToken(token);
+      CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailsService.loadUserByUsername(jwtTokenInfo.email());
+      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(customUserDetails.userId(),
           customUserDetails.getPassword(), customUserDetails.getAuthorities());
       if (SecurityContextHolder.getContext().getAuthentication() == null) {
         SecurityContextHolder.getContext().setAuthentication(authentication);

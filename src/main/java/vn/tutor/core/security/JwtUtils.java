@@ -18,24 +18,24 @@ public class JwtUtils {
   @Value("${jwt.secret}")
   private String secret;
 
-  public String generateToken(AuthToken authToken) {
+  public String generateToken(JwtTokenInfo jwtTokenInfo) {
     return JWT.create()
-        .withSubject(authToken.userId())
+        .withSubject(jwtTokenInfo.userId())
         .withIssuer(ISSUER)
         .withIssuedAt(new Date())
         .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION))
-        .withClaim(EMAIL_CLAIM, authToken.email())
-        .withClaim(ROLE_CLAIM, authToken.authorities())
+        .withClaim(EMAIL_CLAIM, jwtTokenInfo.email())
+        .withClaim(ROLE_CLAIM, jwtTokenInfo.authorities())
         .sign(Algorithm.HMAC256(secret));
   }
 
-  public AuthToken validateToken(String token) {
+  public JwtTokenInfo validateToken(String token) {
     JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(secret))
         .withIssuer(ISSUER).build();
     DecodedJWT jwt = jwtVerifier.verify(token);
     String userId = jwt.getSubject();
     String email = jwt.getClaim(EMAIL_CLAIM).asString();
     List<String> authorities = jwt.getClaim(ROLE_CLAIM).asList(String.class);
-    return new AuthToken(userId, email, authorities);
+    return new JwtTokenInfo(userId, email, authorities);
   }
 }

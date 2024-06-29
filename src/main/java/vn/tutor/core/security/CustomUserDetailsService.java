@@ -23,6 +23,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<String> authorities = user.getUserPermissions().stream()
             .map(up -> up.getPermission().getPermissionType().name())
             .toList();
-        return new CustomUserDetails(user.getEmail(), user.getPassword(), authorities);
+        return new CustomUserDetails(user.getId(), user.getEmail(), user.getPassword(), authorities);
     }
 }
