@@ -13,15 +13,16 @@ import vn.tutor.core.repository.PermissionRepository;
 @RequiredArgsConstructor
 @Transactional
 public class PermissionService {
-    private final PermissionRepository permissionRepository;
 
-    public Permission findPermissionByType(PermissionType permissionType) {
-        return permissionRepository.findByPermissionType(permissionType);
-    }
+  private final PermissionRepository permissionRepository;
 
-    public PermissionResp createAndRetrievePermission(PermissionReq requestDto) {
-        Permission permission = Permission.from(requestDto);
-        permissionRepository.save(permission);
-        return PermissionResp.from(permission);
-    }
+  public Permission findPermissionByType(PermissionType permissionType) {
+    return permissionRepository.findByPermissionType(permissionType);
+  }
+
+  public PermissionResp createAndRetrievePermission(PermissionReq requestDto) {
+    Permission permission = Permission.from(requestDto);
+    permissionRepository.save(permission);
+    return PermissionResp.from(permission);
+  }
 }

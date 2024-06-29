@@ -15,8 +15,11 @@ public class JwtUtils {
   private static final String ISSUER = "api.tutor.vn";
   private static final String EMAIL_CLAIM = "email";
   private static final String ROLE_CLAIM = "roles";
-  @Value("${jwt.secret}")
-  private String secret;
+  private final String secret;
+
+  public JwtUtils(@Value("${jwt.secret}") String secret) {
+    this.secret = secret;
+  }
 
   public String generateToken(JwtTokenInfo jwtTokenInfo) {
     return JWT.create()

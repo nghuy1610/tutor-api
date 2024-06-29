@@ -19,13 +19,13 @@ public class ExceptionHandlerController {
   private static final Logger LOGGER = LogManager.getLogger(ExceptionHandlerController.class);
 
   @ExceptionHandler(AuthenticationException.class)
-  public ResponseEntity<ErrorDto> handleException(AuthenticationException ex) {
+  public ResponseEntity<ErrorDto> handleAuthenticationException(AuthenticationException ex) {
     LOGGER.error("Authentication exception, ex = {}", ExceptionUtils.getStackTrace(ex));
     return constructErrorResponse(ErrorCode.ERROR_001);
   }
 
   @ExceptionHandler(AccessDeniedException.class)
-  public ResponseEntity<ErrorDto> handleException(AccessDeniedException ex) {
+  public ResponseEntity<ErrorDto> handleAccessDeniedException(AccessDeniedException ex) {
     LOGGER.error("Authorisation exception, ex = {}", ExceptionUtils.getStackTrace(ex));
     return constructErrorResponse(ErrorCode.ERROR_002);
   }

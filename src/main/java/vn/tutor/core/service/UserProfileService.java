@@ -15,6 +15,7 @@ import vn.tutor.core.repository.UserProfileRepository;
 @RequiredArgsConstructor
 @Transactional
 public class UserProfileService {
+
   private final UserProfileRepository userProfileRepository;
 
   public UserProfile createUserProfile(User user) {

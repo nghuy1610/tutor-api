@@ -9,6 +9,7 @@ public record UserProfileResp(
     String email,
     String phoneNumber
 ) {
+
   public static UserProfileResp from(UserProfile userProfile) {
     return new UserProfileResp(userProfile.getId(), userProfile.getFirstName(), userProfile.getLastName(),
         userProfile.getEmail(), userProfile.getPhoneNumber());

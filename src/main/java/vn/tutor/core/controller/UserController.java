@@ -17,17 +17,18 @@ import vn.tutor.core.service.UserService;
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserService userService;
 
-    @PostMapping(path="", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResp> registerUser(@RequestBody UserCreationReq requestDto) {
-        UserResp user = userService.createAndRetrieveUser(requestDto);
-        return ResponseEntity.ok(user);
-    }
+  private final UserService userService;
 
-    @PostMapping(path = "login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginResp> login(@RequestBody LoginReq loginReq) {
-        LoginResp responseDto = userService.login(loginReq);
-        return ResponseEntity.ok(responseDto);
-    }
+  @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<UserResp> registerUser(@RequestBody UserCreationReq requestDto) {
+    UserResp user = userService.createAndRetrieveNormalUser(requestDto);
+    return ResponseEntity.ok(user);
+  }
+
+  @PostMapping(path = "login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<LoginResp> login(@RequestBody LoginReq loginReq) {
+    LoginResp responseDto = userService.login(loginReq);
+    return ResponseEntity.ok(responseDto);
+  }
 }

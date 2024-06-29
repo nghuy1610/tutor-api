@@ -69,10 +69,10 @@ public class SecurityConfig {
   }
 
   @Bean
-  public AuthenticationManager configureAuthentication(HttpSecurity http, PasswordEncoder bCryptPasswordEncoder)
+  public AuthenticationManager configureAuthentication(HttpSecurity http, PasswordEncoder bcryptPasswordEncoder)
       throws Exception {
     var builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-    builder.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
+    builder.userDetailsService(customUserDetailsService).passwordEncoder(bcryptPasswordEncoder);
     return builder.build();
   }
 

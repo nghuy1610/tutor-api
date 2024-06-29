@@ -17,12 +17,13 @@ import vn.tutor.core.service.UserService;
 @RequestMapping("/api/admin/users")
 @RequiredArgsConstructor
 public class AdminUserController {
-    private final UserService userService;
 
-    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
-    @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResp> createAndRetrieveUser(@RequestBody @Valid UserCreationReq requestDto) {
-         UserResp responseDto = userService.createAndRetrieveOperator(requestDto);
-         return ResponseEntity.ok(responseDto);
-    }
+  private final UserService userService;
+
+  @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+  @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<UserResp> createAndRetrieveUser(@RequestBody @Valid UserCreationReq requestDto) {
+    UserResp responseDto = userService.createAndRetrieveOperator(requestDto);
+    return ResponseEntity.ok(responseDto);
+  }
 }

@@ -4,6 +4,7 @@ plugins {
     id 'java'
     id "org.flywaydb.flyway" version "10.14.0"
     id "idea"
+    id "checkstyle"
 }
 
 apply plugin: 'java'
@@ -40,8 +41,6 @@ dependencies {
 //    implementation 'org.springframework.kafka:spring-kafka'
 //    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'org.modelmapper:modelmapper:3.2.0'
-    implementation 'org.modelmapper:modelmapper-module-record:1.0.0'
     implementation 'com.auth0:java-jwt:4.4.0'
 
     compileOnly 'org.projectlombok:lombok'
@@ -62,6 +61,16 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true // Show output sent to standard error and standard out
+    }
+    outputs.upToDateWhen { false } // Always re-run even if up-to-date
+}
+
+checkstyle {
+    toolVersion = "10.17.0"
+    ignoreFailures = false
+    maxWarnings = 0
 }
 
 flyway {

@@ -5,5 +5,6 @@ import vn.tutor.core.entity.Permission;
 import vn.tutor.core.enums.PermissionType;
 
 public interface PermissionRepository extends JpaRepository<Permission, String> {
-    Permission findByPermissionType(PermissionType permissionType);
+
+  Permission findByPermissionType(PermissionType permissionType);
 }

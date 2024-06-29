@@ -1,9 +1,18 @@
 package vn.tutor.core.entity;
 
-import lombok.*;
-
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import vn.tutor.core.dto.request.UserCreationReq;
 
 @Entity
@@ -14,25 +23,26 @@ import vn.tutor.core.dto.request.UserCreationReq;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseEntity {
-    @Column(name = "email")
-    private String email;
 
-    @Column(name = "password")
-    private String password;
+  @Column(name = "email")
+  private String email;
 
-    @Column(name = "reset_password_key")
-    private String resetPasswordKey;
+  @Column(name = "password")
+  private String password;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<UserPermission> userPermissions;
+  @Column(name = "reset_password_key")
+  private String resetPasswordKey;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private UserProfile userProfile;
+  @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+  private List<UserPermission> userPermissions;
 
-    public static User from(UserCreationReq userCreationReq) {
-        return User.builder()
-            .email(userCreationReq.email())
-            .password(userCreationReq.password())
-            .build();
-    }
+  @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private UserProfile userProfile;
+
+  public static User from(UserCreationReq userCreationReq) {
+    return User.builder()
+        .email(userCreationReq.email())
+        .password(userCreationReq.password())
+        .build();
+  }
 }

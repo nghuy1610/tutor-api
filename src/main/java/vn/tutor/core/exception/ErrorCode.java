@@ -12,9 +12,9 @@ public enum ErrorCode {
   ERROR_003("TTE-003", "Invalid payload data", HttpStatus.BAD_REQUEST),
   ERROR_004("TTE-004", "Resource not found", HttpStatus.NOT_FOUND);
 
- private final String code;
- private final String message;
- private final HttpStatusCode httpStatusCode;
+  private final String code;
+  private final String message;
+  private final HttpStatusCode httpStatusCode;
 
   ErrorCode(String code, String message, HttpStatusCode httpStatusCode) {
     this.code = code;

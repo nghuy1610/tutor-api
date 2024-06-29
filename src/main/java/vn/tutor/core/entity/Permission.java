@@ -1,6 +1,9 @@
 package vn.tutor.core.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,10 +13,6 @@ import lombok.Setter;
 import vn.tutor.core.dto.request.PermissionReq;
 import vn.tutor.core.enums.PermissionType;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-
 @Entity
 @Table(name = "permission")
 @Getter
@@ -21,12 +20,13 @@ import jakarta.persistence.Enumerated;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Permission extends BaseEntity{
-    @Column(name = "permission_type")
-    @Enumerated(EnumType.STRING)
-    private PermissionType permissionType;
+public class Permission extends BaseEntity {
 
-    public static Permission from(PermissionReq permissionReq) {
-        return new Permission(permissionReq.permissionType());
-    }
+  @Column(name = "permission_type")
+  @Enumerated(EnumType.STRING)
+  private PermissionType permissionType;
+
+  public static Permission from(PermissionReq permissionReq) {
+    return new Permission(permissionReq.permissionType());
+  }
 }
