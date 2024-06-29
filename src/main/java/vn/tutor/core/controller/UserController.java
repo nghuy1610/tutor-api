@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.tutor.core.dto.request.LoginReq;
-import vn.tutor.core.dto.request.UserCreationReqDto;
+import vn.tutor.core.dto.request.UserCreationReq;
 import vn.tutor.core.dto.response.LoginResp;
 import vn.tutor.core.dto.response.UserResp;
 import vn.tutor.core.service.UserService;
@@ -20,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(path="", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResp> registerUser(@RequestBody UserCreationReqDto requestDto) {
+    public ResponseEntity<UserResp> registerUser(@RequestBody UserCreationReq requestDto) {
         UserResp user = userService.createAndRetrieveUser(requestDto);
         return ResponseEntity.ok(user);
     }

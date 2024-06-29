@@ -7,12 +7,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.tutor.core.dto.request.LoginReq;
-import vn.tutor.core.dto.request.UserCreationReqDto;
+import vn.tutor.core.dto.request.UserCreationReq;
 import vn.tutor.core.dto.response.LoginResp;
 import vn.tutor.core.dto.response.UserResp;
 import vn.tutor.core.entity.User;
 import vn.tutor.core.enums.PermissionType;
-import vn.tutor.core.mapper.Mapper;
 import vn.tutor.core.repository.UserRepository;
 
 import java.util.List;
@@ -24,7 +23,6 @@ import vn.tutor.core.security.JwtUtils;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final Mapper mapper;
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -33,24 +31,24 @@ public class UserService {
     private final StudentService studentService;
     private final UserProfileService userProfileService;
 
-    public UserResp createAndRetrieveUser(UserCreationReqDto requestDto) {
-        if (PermissionType.isNormalUserPermission(requestDto.getRole())) {
-            return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.getRole()));
+    public UserResp createAndRetrieveUser(UserCreationReq requestDto) {
+        if (PermissionType.isNormalUserPermission(requestDto.role())) {
+            return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.role()));
         } else {
-            throw new IllegalArgumentException("Invalid role: " + requestDto.getRole());
+            throw new IllegalArgumentException("Invalid role: " + requestDto.role());
         }
     }
 
-    public UserResp createAndRetrieveOperator(UserCreationReqDto requestDto) {
-        if (PermissionType.isOperatorPermission(requestDto.getRole())) {
-            return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.getRole()));
+    public UserResp createAndRetrieveOperator(UserCreationReq requestDto) {
+        if (PermissionType.isOperatorPermission(requestDto.role())) {
+            return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.role()));
         } else {
-            throw new IllegalArgumentException("Invalid role: " + requestDto.getRole());
+            throw new IllegalArgumentException("Invalid role: " + requestDto.role());
         }
     }
 
-    private UserResp createAndRetrieveUser(UserCreationReqDto requestDto, PermissionType permissionType) {
-        User user = mapper.map(requestDto, User.class);
+    private UserResp createAndRetrieveUser(UserCreationReq requestDto, PermissionType permissionType) {
+        User user = User.from(requestDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserPermissions(userPermissionService.createUserPermissionWithAuthoritiesForUser(List.of(permissionType), user));
         userRepository.save(user);
@@ -60,12 +58,12 @@ public class UserService {
             case TUTOR -> tutorService.createTutor(user);
             case STUDENT -> studentService.createStudent(user);
         }
-        return mapper.map(user, UserResp.class);
+        return UserResp.from(user);
     }
 
     public LoginResp login(LoginReq loginReq) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getEmail(), loginReq.getPassword()));
-        User user = userRepository.findFullUserByEmail(loginReq.getEmail());
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.email(), loginReq.password()));
+        User user = userRepository.findFullUserByEmail(loginReq.email());
         List<String> authorities = user.getUserPermissions().stream().map(up -> up.getPermission().getPermissionType().name()).toList();
         return new LoginResp(jwtUtils.generateToken(new JwtTokenInfo(user.getId(), user.getEmail(), authorities)), authorities);
     }

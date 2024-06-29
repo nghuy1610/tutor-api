@@ -4,11 +4,15 @@ import lombok.*;
 
 import jakarta.persistence.*;
 import java.util.List;
+import vn.tutor.core.dto.request.UserCreationReq;
 
 @Entity
 @Table(name = "user")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User extends BaseEntity {
     @Column(name = "email")
     private String email;
@@ -24,4 +28,11 @@ public class User extends BaseEntity {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserProfile userProfile;
+
+    public static User from(UserCreationReq userCreationReq) {
+        return User.builder()
+            .email(userCreationReq.email())
+            .password(userCreationReq.password())
+            .build();
+    }
 }

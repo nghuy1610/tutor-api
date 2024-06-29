@@ -1,12 +1,13 @@
 package vn.tutor.core.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import vn.tutor.core.entity.Permission;
 import vn.tutor.core.enums.PermissionType;
 
-@Getter
-@Setter
-public class PermissionResp {
-    private String id;
-    private PermissionType permissionType;
+public record PermissionResp (
+    String id,
+    PermissionType permissionType
+) {
+    public static PermissionResp from(Permission permission) {
+        return new PermissionResp(permission.getId(), permission.getPermissionType());
+    }
 }

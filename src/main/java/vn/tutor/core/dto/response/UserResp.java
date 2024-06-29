@@ -1,12 +1,15 @@
 package vn.tutor.core.dto.response;
 
-import lombok.Data;
-
 import java.util.List;
+import vn.tutor.core.entity.User;
 
-@Data
-public class UserResp {
-    private String id;
-    private String email;
-    private List<String> permissionType;
+public record UserResp (
+    String id,
+    String email,
+    List<String> permissionType
+) {
+    public static UserResp from(User user) {
+        return new UserResp(user.getId(), user.getEmail(),
+            user.getUserPermissions().stream().map(up -> up.getPermission().getPermissionType().name()).toList());
+    }
 }
