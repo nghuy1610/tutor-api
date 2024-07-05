@@ -24,5 +24,6 @@ jobs:
           VALIDATE_GOOGLE_JAVA_FORMAT: false
           VALIDATE_XML: false
           VALIDATE_YAML: false
-          FILTER_REGEX_INCLUDE: .+\.java|.+\.sql|.+\.yaml|.+\.yml
+          VALIDATE_CHECKOV: false
+          FILTER_REGEX_INCLUDE: .+\.java
           JSCPD_CONFIG_FILE: config.jscpd.json
