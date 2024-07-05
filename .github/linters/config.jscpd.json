@@ -6,7 +6,7 @@
     "consoleFull"
   ],
   "ignore": [
-    "**/__snapshots__/**"
+    "**/.github/**"
   ],
   "absolute": true
 }
