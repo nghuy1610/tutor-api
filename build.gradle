@@ -65,6 +65,7 @@ test {
         showStandardStreams = true // Show output sent to standard error and standard out
     }
     outputs.upToDateWhen { false } // Always re-run even if up-to-date
+    systemProperties['spring.profiles.active'] = 'test'
 }
 
 checkstyle {

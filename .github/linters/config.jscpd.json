@@ -1,0 +1,12 @@
+{
+  "threshold": 0,
+  "minLines": 9,
+  "minTokens": 100,
+  "reporters": [
+    "consoleFull"
+  ],
+  "ignore": [
+    "**/.github/**"
+  ],
+  "absolute": true
+}

@@ -1,0 +1,53 @@
+# Server
+server:
+  port: 8181
+  servlet:
+    session:
+      timeout: 5m
+      cookie:
+        http-only: true
+        max-age: -1
+      tracking-modes: cookie
+
+
+# Data source
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/tutor?characterEncoding=UTF-8
+    username: test-tutor
+    password: test123
+    hikari:
+      auto-commit: false
+      connection-timeout: 20000
+      minimum-idle: 2
+      maximum-pool-size: 5
+      max-lifetime: 900000
+      idle-timeout: 300000
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        show_sql: true
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false
+          provider_class: org.hibernate.cache.EhCacheProvider
+        jdbc:
+          batch_size: 40
+    open-in-view: false
+
+  # Flyway
+  flyway:
+    locations: classpath:db/migration
+    baselineOnMigrate: true
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+jwt:
+  secret: pc#h38^a+HK
