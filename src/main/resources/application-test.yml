@@ -14,8 +14,8 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/tutor?characterEncoding=UTF-8
-    username: dev-tutor
-    password: tutor123
+    username: test-tutor
+    password: test123
     hikari:
       auto-commit: false
       connection-timeout: 20000
