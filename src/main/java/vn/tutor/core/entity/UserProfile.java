@@ -2,6 +2,7 @@ package vn.tutor.core.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -33,7 +34,7 @@ public class UserProfile extends BaseEntity {
   @Column(name = "last_name")
   private String lastName;
 
-  @OneToOne()
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 

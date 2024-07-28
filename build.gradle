@@ -57,6 +57,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:6.5.2.Final"
 }
 
 test {

@@ -20,13 +20,13 @@ public class UserProfileController {
   private final UserProfileService userProfileService;
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<UserProfileResp> retrieveUserProfile(@AuthenticationPrincipal String userId) {
+  public ResponseEntity<UserProfileResp> retrieveCurrentUserProfile(@AuthenticationPrincipal String userId) {
     UserProfileResp userProfileResp = userProfileService.retrieveUserProfile(userId);
     return ResponseEntity.ok(userProfileResp);
   }
 
   @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<UserProfileResp> updateUserProfile(
+  public ResponseEntity<UserProfileResp> updateCurrentUserProfile(
       @RequestBody UserProfileReq userProfileReq, @AuthenticationPrincipal String userId) {
     UserProfileResp userProfileResp = userProfileService.updateUserProfile(userId, userProfileReq);
     return ResponseEntity.ok(userProfileResp);
