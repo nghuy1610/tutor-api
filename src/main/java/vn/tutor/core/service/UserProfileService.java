@@ -41,7 +41,8 @@ public class UserProfileService {
         .orElseThrow(() -> new ResourceNotFoundException("User profile not found"));
   }
 
-  public PagingResponse<UserProfileResp> retrieveNormalUserProfiles(String email, String name, int pageNum, int pageSize) {
+  public PagingResponse<UserProfileResp> retrieveNormalUserProfiles(String email, String name,
+                                                                    int pageNum, int pageSize) {
     Specification<UserProfile> spec = userProfileSpecification.isNormalUser();
     if (StringUtils.isNotBlank(email)) {
       spec = spec.and(userProfileSpecification.hasEmail(email));
@@ -51,7 +52,8 @@ public class UserProfileService {
     }
     Page<UserProfile> userProfilePage = userProfileRepository.findAll(spec, PageRequest.of(pageNum, pageSize));
     List<UserProfileResp> userProfileRespList = userProfilePage.stream().map(UserProfileResp::from).toList();
-    return new PagingResponse<>(userProfileRespList, userProfilePage.getNumber(), userProfilePage.getTotalPages(), userProfilePage.getTotalElements());
+    return new PagingResponse<>(userProfileRespList, userProfilePage.getNumber(),
+        userProfilePage.getTotalPages(), userProfilePage.getTotalElements());
   }
 
   public UserProfileResp updateUserProfile(String userId, UserProfileReq userProfileReq) {

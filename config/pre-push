@@ -1,0 +1,17 @@
+#!/bin/sh
+
+echo "***** Running checkstyle ******"
+
+# stash any unstaged changes
+git stash -q --keep-index
+
+./gradlew checkstyleMain checkstyleTest
+
+status=$?
+
+# un-stash the unstaged changes
+git stash pop -q
+
+echo "***** Done with checkstyle ******"
+
+exit $status
