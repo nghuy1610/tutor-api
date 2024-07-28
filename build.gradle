@@ -97,3 +97,7 @@ tasks.register('installLocalGitHook', Copy) {
 tasks.named('classes') {
     dependsOn installLocalGitHook
 }
+
+tasks.named('clean') {
+    dependsOn installLocalGitHook
+}
