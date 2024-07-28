@@ -87,3 +87,17 @@ idea {
         downloadJavadoc = true
     }
 }
+
+tasks.register('installLocalGitHook', Copy) {
+    from new File(rootProject.rootDir, 'config/pre-push')
+    into { new File(rootProject.rootDir, '.git/hooks') }
+    fileMode 0775
+}
+
+tasks.named('classes') {
+    dependsOn installLocalGitHook
+}
+
+tasks.named('clean') {
+    dependsOn installLocalGitHook
+}

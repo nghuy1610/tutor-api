@@ -31,8 +31,10 @@ public class AdminProfileController {
     return ResponseEntity.ok(userProfileService.retrieveNormalUserProfiles(email, name, pageNum, pageSize));
   }
 
-  @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<UserProfileResp> updateUserProfile(@PathVariable String id, @RequestBody UserProfileReq profileReq) {
+  @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<UserProfileResp> updateUserProfile(@PathVariable String id,
+                                                           @RequestBody UserProfileReq profileReq) {
     return ResponseEntity.ok(userProfileService.updateNormalUserProfile(id, profileReq));
   }
 
