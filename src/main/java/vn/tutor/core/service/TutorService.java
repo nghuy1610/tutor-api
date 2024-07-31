@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.tutor.core.entity.Tutor;
 import vn.tutor.core.entity.User;
+import vn.tutor.core.enums.VerificationStatus;
 import vn.tutor.core.repository.TutorRepository;
 
 @Service
@@ -16,6 +17,7 @@ public class TutorService {
   public Tutor createTutor(User user) {
     Tutor tutor = new Tutor();
     tutor.setUser(user);
+    tutor.setVerificationStatus(VerificationStatus.PENDING);
     return tutorRepository.save(tutor);
   }
 }
