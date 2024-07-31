@@ -1,3 +1,11 @@
 spring:
   profiles:
     active: local
+  task:
+    execution:
+      pool:
+        core-size: 2
+        max-size: 5
+        queue-capacity: 50
+        keep-alive: 10s
+      thread-name-prefix: async-task-

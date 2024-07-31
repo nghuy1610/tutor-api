@@ -1,5 +1,6 @@
 package vn.tutor.core.controller.admin;
 
+import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,18 +25,19 @@ public class AdminProfileController {
   private final UserProfileService userProfileService;
 
   @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<PagingResponse<UserProfileResp>> retrieveUserProfiles(@RequestParam(required = false) String email,
-                                                                              @RequestParam(required = false) String name,
-                                                                              @RequestParam(required = false, defaultValue = "0") int pageNum,
-                                                                              @RequestParam(required = false, defaultValue = "10") int pageSize) {
-    return ResponseEntity.ok(userProfileService.retrieveNormalUserProfiles(email, name, pageNum, pageSize));
+  public Callable<ResponseEntity<PagingResponse<UserProfileResp>>> retrieveUserProfiles(
+      @RequestParam(required = false) String email,
+      @RequestParam(required = false) String name,
+      @RequestParam(required = false, defaultValue = "0") int pageNum,
+      @RequestParam(required = false, defaultValue = "10") int pageSize) {
+    return () -> ResponseEntity.ok(userProfileService.retrieveNormalUserProfiles(email, name, pageNum, pageSize));
   }
 
   @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<UserProfileResp> updateUserProfile(@PathVariable String id,
+  public Callable<ResponseEntity<UserProfileResp>> updateUserProfile(@PathVariable String id,
                                                            @RequestBody UserProfileReq profileReq) {
-    return ResponseEntity.ok(userProfileService.updateNormalUserProfile(id, profileReq));
+    return () -> ResponseEntity.ok(userProfileService.updateNormalUserProfile(id, profileReq));
   }
 
 }

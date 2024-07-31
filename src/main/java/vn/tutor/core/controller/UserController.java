@@ -1,5 +1,6 @@
 package vn.tutor.core.controller;
 
+import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,18 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<UserResp> registerUser(@RequestBody UserCreationReq requestDto) {
-    UserResp userResp = UserResp.from(userService.createAndRetrieveNormalUser(requestDto));
-    return ResponseEntity.ok(userResp);
+  public Callable<ResponseEntity<UserResp>> registerUser(@RequestBody UserCreationReq requestDto) {
+    return () -> {
+      UserResp userResp = UserResp.from(userService.createAndRetrieveNormalUser(requestDto));
+      return ResponseEntity.ok(userResp);
+    };
   }
 
   @PostMapping(path = "login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<LoginResp> login(@RequestBody LoginReq loginReq) {
-    LoginResp responseDto = userService.login(loginReq);
-    return ResponseEntity.ok(responseDto);
+  public Callable<ResponseEntity<LoginResp>> login(@RequestBody LoginReq loginReq) {
+    return () -> {
+      LoginResp responseDto = userService.login(loginReq);
+      return ResponseEntity.ok(responseDto);
+    };
   }
 }
