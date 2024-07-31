@@ -23,7 +23,7 @@ public class AdminUserController {
   @PreAuthorize("hasAuthority('SUPER_ADMIN')")
   @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<UserResp> createAndRetrieveUser(@RequestBody @Valid UserCreationReq requestDto) {
-    UserResp responseDto = userService.createAndRetrieveOperator(requestDto);
+    UserResp responseDto = UserResp.from(userService.createAndRetrieveOperator(requestDto));
     return ResponseEntity.ok(responseDto);
   }
 }

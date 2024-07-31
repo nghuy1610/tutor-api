@@ -21,7 +21,7 @@ public class UserProfileController {
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<UserProfileResp> retrieveCurrentUserProfile(@AuthenticationPrincipal String userId) {
-    UserProfileResp userProfileResp = userProfileService.retrieveUserProfile(userId);
+    UserProfileResp userProfileResp = UserProfileResp.from(userProfileService.retrieveUserProfile(userId));
     return ResponseEntity.ok(userProfileResp);
   }
 
