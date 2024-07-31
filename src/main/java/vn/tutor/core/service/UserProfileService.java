@@ -16,6 +16,7 @@ import vn.tutor.core.dto.response.UserProfileResp;
 import vn.tutor.core.entity.User;
 import vn.tutor.core.entity.UserProfile;
 import vn.tutor.core.enums.PermissionType;
+import vn.tutor.core.enums.UserType;
 import vn.tutor.core.exception.ResourceNotFoundException;
 import vn.tutor.core.repository.UserProfileRepository;
 import vn.tutor.core.repository.specification.UserProfileSpecification;
@@ -28,9 +29,10 @@ public class UserProfileService {
   private final UserProfileRepository userProfileRepository;
   private final UserProfileSpecification userProfileSpecification;
 
-  public UserProfile createUserProfile(User user) {
+  public UserProfile createUserProfile(User user, UserType userType) {
     UserProfile userProfile = new UserProfile();
     userProfile.setUser(user);
+    userProfile.setUserType(userType);
     userProfile.setEmail(user.getEmail());
     return userProfileRepository.save(userProfile);
   }

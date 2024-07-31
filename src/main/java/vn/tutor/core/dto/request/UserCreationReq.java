@@ -7,6 +7,6 @@ public record UserCreationReq(
     String email,
     @NotBlank (message = "Password is required")
     String password,
-    @NotBlank(message = "Role is required")
-    String role
+    @NotBlank(message = "Type is required")
+    String type
 ){}

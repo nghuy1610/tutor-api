@@ -6,11 +6,12 @@ public enum PermissionType {
   TUTOR,
   STUDENT;
 
-  public static boolean isNormalUserPermission(String permission) {
-    return "TUTOR".equalsIgnoreCase(permission) || "STUDENT".equalsIgnoreCase(permission);
-  }
-
-  public static boolean isOperatorPermission(String permission) {
-    return "OPERATOR".equalsIgnoreCase(permission);
+  public static PermissionType fromUserType(UserType userType) {
+    return switch (userType) {
+      case SUPER_ADMIN -> SUPER_ADMIN;
+      case OPERATOR -> OPERATOR;
+      case TUTOR -> TUTOR;
+      case STUDENT -> STUDENT;
+    };
   }
 }
