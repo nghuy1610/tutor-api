@@ -1,5 +1,6 @@
 package vn.tutor.core.controller;
 
+import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +21,20 @@ public class UserProfileController {
   private final UserProfileService userProfileService;
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<UserProfileResp> retrieveCurrentUserProfile(@AuthenticationPrincipal String userId) {
-    UserProfileResp userProfileResp = UserProfileResp.from(userProfileService.retrieveUserProfile(userId));
-    return ResponseEntity.ok(userProfileResp);
+  public Callable<ResponseEntity<UserProfileResp>> retrieveCurrentUserProfile(@AuthenticationPrincipal String userId) {
+    return () -> {
+      UserProfileResp userProfileResp = UserProfileResp.from(userProfileService.retrieveUserProfile(userId));
+      return ResponseEntity.ok(userProfileResp);
+    };
   }
 
   @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<UserProfileResp> updateCurrentUserProfile(
+  public Callable<ResponseEntity<UserProfileResp>> updateCurrentUserProfile(
       @RequestBody UserProfileReq userProfileReq, @AuthenticationPrincipal String userId) {
-    UserProfileResp userProfileResp = userProfileService.updateUserProfile(userId, userProfileReq);
-    return ResponseEntity.ok(userProfileResp);
+    return () -> {
+      UserProfileResp userProfileResp = userProfileService.updateUserProfile(userId, userProfileReq);
+      return ResponseEntity.ok(userProfileResp);
+    };
   }
 
 }
