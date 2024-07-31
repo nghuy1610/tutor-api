@@ -1,5 +1,6 @@
 package vn.tutor.core.config;
 
+import jakarta.servlet.DispatcherType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -54,6 +55,7 @@ public class SecurityConfig {
         .formLogin(AbstractHttpConfigurer::disable)
         .cors(Customizer.withDefaults())
         .authorizeHttpRequests(registry -> registry.requestMatchers(WHITE_LISTS).permitAll()
+            .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
             .anyRequest().authenticated())
         .userDetailsService(customUserDetailsService)
         .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer

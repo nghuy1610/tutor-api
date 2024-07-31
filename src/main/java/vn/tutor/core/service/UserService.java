@@ -11,7 +11,7 @@ import vn.tutor.core.dto.request.LoginReq;
 import vn.tutor.core.dto.request.UserCreationReq;
 import vn.tutor.core.dto.response.LoginResp;
 import vn.tutor.core.entity.User;
-import vn.tutor.core.enums.PermissionType;
+import vn.tutor.core.enums.UserType;
 import vn.tutor.core.repository.UserRepository;
 import vn.tutor.core.security.JwtTokenInfo;
 import vn.tutor.core.security.JwtUtils;
@@ -31,30 +31,30 @@ public class UserService {
   private final UserProfileService userProfileService;
 
   public User createAndRetrieveNormalUser(UserCreationReq requestDto) {
-    if (PermissionType.isNormalUserPermission(requestDto.role())) {
-      return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.role()));
+    if (UserType.isNormalUserType(requestDto.type())) {
+      return createAndRetrieveUser(requestDto, UserType.valueOf(requestDto.type()));
     } else {
-      throw new IllegalArgumentException("Invalid role: " + requestDto.role());
+      throw new IllegalArgumentException("Invalid user type: " + requestDto.type());
     }
   }
 
   public User createAndRetrieveOperator(UserCreationReq requestDto) {
-    if (PermissionType.isOperatorPermission(requestDto.role())) {
-      return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.role()));
+    if (UserType.isOperatorUserType(requestDto.type())) {
+      return createAndRetrieveUser(requestDto, UserType.valueOf(requestDto.type()));
     } else {
-      throw new IllegalArgumentException("Invalid role: " + requestDto.role());
+      throw new IllegalArgumentException("Invalid user type: " + requestDto.type());
     }
   }
 
-  private User createAndRetrieveUser(UserCreationReq requestDto, PermissionType permissionType) {
+  private User createAndRetrieveUser(UserCreationReq requestDto, UserType userType) {
     User user = User.from(requestDto);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setUserPermissions(
-        userPermissionService.createUserPermissionWithAuthoritiesForUser(List.of(permissionType), user));
+        userPermissionService.createUserPermissionForUser(user, userType));
     userRepository.save(user);
-    user.setUserProfile(userProfileService.createUserProfile(user));
+    user.setUserProfile(userProfileService.createUserProfile(user, userType));
 
-    switch (permissionType) {
+    switch (userType) {
       case TUTOR -> tutorService.createTutor(user);
       case STUDENT -> studentService.createStudent(user);
     }
