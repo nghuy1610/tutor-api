@@ -17,6 +17,7 @@ import vn.tutor.core.dto.request.UserProfileReq;
 import vn.tutor.core.dto.response.UserProfileResp;
 import vn.tutor.core.entity.User;
 import vn.tutor.core.entity.UserProfile;
+import vn.tutor.core.enums.UserType;
 import vn.tutor.core.exception.ResourceNotFoundException;
 import vn.tutor.core.repository.UserProfileRepository;
 import vn.tutor.core.service.UserProfileService;
@@ -36,9 +37,10 @@ public class UserProfileServiceTest {
 
     when(userProfileRepository.save(any())).then(AdditionalAnswers.returnsFirstArg());
 
-    UserProfile userProfile = userProfileService.createUserProfile(user);
+    UserProfile userProfile = userProfileService.createUserProfile(user, UserType.STUDENT);
 
     assertThat(userProfile.getEmail()).isEqualTo(user.getEmail());
+    assertThat(userProfile.getUserType()).isEqualTo(UserType.STUDENT);
   }
 
   @Test
@@ -49,9 +51,10 @@ public class UserProfileServiceTest {
         .phoneNumber("phoneNumber")
         .firstName("firstName")
         .lastName("lastName")
+        .userType(UserType.TUTOR)
         .build();
     storedUserProfile.setId("id");
-    UserProfile expectedResp = new UserProfile("email", "phoneNumber", "firstName", "lastName", null);
+    UserProfile expectedResp = new UserProfile("email", "phoneNumber", "firstName", "lastName", UserType.TUTOR, null);
     expectedResp.setId("id");
 
     when(userProfileRepository.findByUserId(eq(userId)))
@@ -82,10 +85,12 @@ public class UserProfileServiceTest {
         .phoneNumber("phoneNumber")
         .firstName("firstName")
         .lastName("lastName")
+        .userType(UserType.OPERATOR)
         .build();
     userProfile.setId("id");
     UserProfileReq userProfileReq = new UserProfileReq("newPhoneNumber", "newFirstName", "newLastName");
-    UserProfileResp expectedResp = new UserProfileResp("id", "newFirstName", "newLastName", "email", "newPhoneNumber");
+    UserProfileResp expectedResp = new UserProfileResp("id", "newFirstName", "newLastName",
+        "email", "newPhoneNumber", "OPERATOR");
 
     when(userProfileRepository.findByUserId(eq(userId)))
         .thenReturn(Optional.of(userProfile));
