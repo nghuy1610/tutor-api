@@ -35,9 +35,8 @@ public class UserProfileService {
     return userProfileRepository.save(userProfile);
   }
 
-  public UserProfileResp retrieveUserProfile(String userId) {
+  public UserProfile retrieveUserProfile(String userId) {
     return userProfileRepository.findByUserId(userId)
-        .map(UserProfileResp::from)
         .orElseThrow(() -> new ResourceNotFoundException("User profile not found"));
   }
 

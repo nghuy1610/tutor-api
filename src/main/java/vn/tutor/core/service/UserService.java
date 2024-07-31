@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.tutor.core.dto.request.LoginReq;
 import vn.tutor.core.dto.request.UserCreationReq;
 import vn.tutor.core.dto.response.LoginResp;
-import vn.tutor.core.dto.response.UserResp;
 import vn.tutor.core.entity.User;
 import vn.tutor.core.enums.PermissionType;
 import vn.tutor.core.repository.UserRepository;
@@ -31,7 +30,7 @@ public class UserService {
   private final StudentService studentService;
   private final UserProfileService userProfileService;
 
-  public UserResp createAndRetrieveNormalUser(UserCreationReq requestDto) {
+  public User createAndRetrieveNormalUser(UserCreationReq requestDto) {
     if (PermissionType.isNormalUserPermission(requestDto.role())) {
       return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.role()));
     } else {
@@ -39,7 +38,7 @@ public class UserService {
     }
   }
 
-  public UserResp createAndRetrieveOperator(UserCreationReq requestDto) {
+  public User createAndRetrieveOperator(UserCreationReq requestDto) {
     if (PermissionType.isOperatorPermission(requestDto.role())) {
       return createAndRetrieveUser(requestDto, PermissionType.valueOf(requestDto.role()));
     } else {
@@ -47,7 +46,7 @@ public class UserService {
     }
   }
 
-  private UserResp createAndRetrieveUser(UserCreationReq requestDto, PermissionType permissionType) {
+  private User createAndRetrieveUser(UserCreationReq requestDto, PermissionType permissionType) {
     User user = User.from(requestDto);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setUserPermissions(
@@ -59,7 +58,7 @@ public class UserService {
       case TUTOR -> tutorService.createTutor(user);
       case STUDENT -> studentService.createStudent(user);
     }
-    return UserResp.from(user);
+    return user;
   }
 
   public LoginResp login(LoginReq loginReq) {

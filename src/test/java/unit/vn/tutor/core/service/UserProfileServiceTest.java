@@ -44,21 +44,22 @@ public class UserProfileServiceTest {
   @Test
   void givenUserId_whenGetUserProfile_thenReturnUserProfile() {
     String userId = "userId";
-    UserProfile userProfile = UserProfile.builder()
+    UserProfile storedUserProfile = UserProfile.builder()
         .email("email")
         .phoneNumber("phoneNumber")
         .firstName("firstName")
         .lastName("lastName")
         .build();
-    userProfile.setId("id");
-    UserProfileResp expectedResp = new UserProfileResp("id", "firstName", "lastName", "email", "phoneNumber");
+    storedUserProfile.setId("id");
+    UserProfile expectedResp = new UserProfile("email", "phoneNumber", "firstName", "lastName", null);
+    expectedResp.setId("id");
 
     when(userProfileRepository.findByUserId(eq(userId)))
-        .thenReturn(Optional.of(userProfile));
+        .thenReturn(Optional.of(storedUserProfile));
 
-    UserProfileResp userProfileResp = userProfileService.retrieveUserProfile(userId);
+    UserProfile userProfile = userProfileService.retrieveUserProfile(userId);
 
-    assertThat(userProfileResp).isEqualTo(expectedResp);
+    assertThat(userProfile).isEqualTo(expectedResp);
   }
 
   @Test
