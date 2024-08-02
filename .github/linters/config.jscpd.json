@@ -8,5 +8,6 @@
   "ignore": [
     "**/.github/**"
   ],
+  "ignorePattern": ["import .* from '.*';"]
   "absolute": true
 }
