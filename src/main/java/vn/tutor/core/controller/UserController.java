@@ -23,10 +23,7 @@ public class UserController {
 
   @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<UserResp>> registerUser(@RequestBody UserCreationReq requestDto) {
-    return () -> {
-      UserResp userResp = UserResp.from(userService.createAndRetrieveNormalUser(requestDto));
-      return ResponseEntity.ok(userResp);
-    };
+    return () -> ResponseEntity.ok(userService.createAndRetrieveNormalUser(requestDto));
   }
 
   @PostMapping(path = "login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

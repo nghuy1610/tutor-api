@@ -22,19 +22,13 @@ public class UserProfileController {
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<UserProfileResp>> retrieveCurrentUserProfile(@AuthenticationPrincipal String userId) {
-    return () -> {
-      UserProfileResp userProfileResp = UserProfileResp.from(userProfileService.retrieveUserProfile(userId));
-      return ResponseEntity.ok(userProfileResp);
-    };
+    return () -> ResponseEntity.ok(userProfileService.retrieveUserProfile(userId));
   }
 
   @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<UserProfileResp>> updateCurrentUserProfile(
       @RequestBody UserProfileReq userProfileReq, @AuthenticationPrincipal String userId) {
-    return () -> {
-      UserProfileResp userProfileResp = userProfileService.updateUserProfile(userId, userProfileReq);
-      return ResponseEntity.ok(userProfileResp);
-    };
+    return () -> ResponseEntity.ok(userProfileService.updateUserProfile(userId, userProfileReq));
   }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.tutor.core.dto.request.LoginReq;
 import vn.tutor.core.dto.request.UserCreationReq;
 import vn.tutor.core.dto.response.LoginResp;
+import vn.tutor.core.dto.response.UserResp;
 import vn.tutor.core.entity.User;
 import vn.tutor.core.enums.UserType;
 import vn.tutor.core.repository.UserRepository;
@@ -30,17 +31,17 @@ public class UserService {
   private final StudentService studentService;
   private final UserProfileService userProfileService;
 
-  public User createAndRetrieveNormalUser(UserCreationReq requestDto) {
+  public UserResp createAndRetrieveNormalUser(UserCreationReq requestDto) {
     if (UserType.isNormalUserType(requestDto.type())) {
-      return createAndRetrieveUser(requestDto, UserType.valueOf(requestDto.type()));
+      return UserResp.from(createAndRetrieveUser(requestDto, UserType.valueOf(requestDto.type())));
     } else {
       throw new IllegalArgumentException("Invalid user type: " + requestDto.type());
     }
   }
 
-  public User createAndRetrieveOperator(UserCreationReq requestDto) {
+  public UserResp createAndRetrieveOperator(UserCreationReq requestDto) {
     if (UserType.isOperatorUserType(requestDto.type())) {
-      return createAndRetrieveUser(requestDto, UserType.valueOf(requestDto.type()));
+      return UserResp.from(createAndRetrieveUser(requestDto, UserType.valueOf(requestDto.type())));
     } else {
       throw new IllegalArgumentException("Invalid user type: " + requestDto.type());
     }
