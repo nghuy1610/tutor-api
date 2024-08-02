@@ -37,9 +37,10 @@ public class UserProfileService {
     return userProfileRepository.save(userProfile);
   }
 
-  public UserProfile retrieveUserProfile(String userId) {
-    return userProfileRepository.findByUserId(userId)
+  public UserProfileResp retrieveUserProfile(String userId) {
+    UserProfile userProfile =  userProfileRepository.findByUserId(userId)
         .orElseThrow(() -> new ResourceNotFoundException("User profile not found"));
+    return UserProfileResp.from(userProfile);
   }
 
   public PagingResponse<UserProfileResp> retrieveNormalUserProfiles(String email, String name,

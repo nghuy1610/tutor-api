@@ -5,12 +5,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import vn.tutor.core.dto.request.TutorReq;
 import vn.tutor.core.enums.Gender;
 import vn.tutor.core.enums.VerificationStatus;
 
@@ -34,10 +36,16 @@ public class Tutor extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private VerificationStatus verificationStatus;
 
-  @OneToMany(mappedBy = "tutor")
+  @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL)
   private List<TutorSpecialty> tutorSpecialties;
 
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne(fetch = FetchType.LAZY)
   private User user;
+
+  public void apply(TutorReq tutorReq) {
+    this.introduction = tutorReq.introduction();
+    this.address = tutorReq.address();
+    this.gender = Gender.valueOf(tutorReq.gender());
+  }
 
 }

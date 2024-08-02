@@ -54,15 +54,15 @@ public class UserProfileServiceTest {
         .userType(UserType.TUTOR)
         .build();
     storedUserProfile.setId("id");
-    UserProfile expectedResp = new UserProfile("email", "phoneNumber", "firstName", "lastName", UserType.TUTOR, null);
-    expectedResp.setId("id");
+    UserProfileResp expectedResp = new UserProfileResp("id", "firstName", "lastName",
+                                                       "email", "phoneNumber", UserType.TUTOR.name());
 
     when(userProfileRepository.findByUserId(eq(userId)))
         .thenReturn(Optional.of(storedUserProfile));
 
-    UserProfile userProfile = userProfileService.retrieveUserProfile(userId);
+    UserProfileResp userProfileResp = userProfileService.retrieveUserProfile(userId);
 
-    assertThat(userProfile).isEqualTo(expectedResp);
+    assertThat(userProfileResp).isEqualTo(expectedResp);
   }
 
   @Test
