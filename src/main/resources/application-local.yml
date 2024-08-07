@@ -35,12 +35,6 @@ spring:
           provider_class: org.hibernate.cache.EhCacheProvider
         jdbc:
           batch_size: 40
-    open-in-view: false
-
-  # Flyway
-  flyway:
-    locations: classpath:db/migration
-    baselineOnMigrate: true
 
 # Actuator
 management:

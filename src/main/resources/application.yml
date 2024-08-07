@@ -9,3 +9,9 @@ spring:
         queue-capacity: 50
         keep-alive: 10s
       thread-name-prefix: async-task-
+  jpa:
+    open-in-view: false
+  # Flyway
+  flyway:
+    locations: classpath:db/migration
+    baselineOnMigrate: true
