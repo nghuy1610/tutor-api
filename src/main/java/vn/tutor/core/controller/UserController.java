@@ -34,7 +34,7 @@ public class UserController {
 
   @PostMapping(path = "login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<LoginResp>> login(
-      @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID, "abcd"}) HttpHeaders headers,
+      @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
       @RequestBody LoginReq loginReq) {
     return () -> {
       LoginResp responseDto = userService.login(loginReq);
