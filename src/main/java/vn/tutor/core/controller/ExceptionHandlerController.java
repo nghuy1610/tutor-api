@@ -9,6 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import vn.tutor.core.dto.ErrorDto;
 import vn.tutor.core.exception.ErrorCode;
 import vn.tutor.core.exception.ResourceNotFoundException;
@@ -40,6 +41,12 @@ public class ExceptionHandlerController {
   public ResponseEntity<ErrorDto> handleResourceNotFoundException(ResourceNotFoundException ex) {
     LOGGER.error("Resource not found exception, ex = {}", ExceptionUtils.getStackTrace(ex));
     return constructErrorResponse(ErrorCode.ERROR_004, ex);
+  }
+
+  @ExceptionHandler(HandlerMethodValidationException.class)
+  public ResponseEntity<ErrorDto> handleResourceNotFoundException(HandlerMethodValidationException ex) {
+    LOGGER.error("Handler method validation exception, ex = {}", ExceptionUtils.getStackTrace(ex));
+    return constructErrorResponse(ErrorCode.ERROR_005, ex);
   }
 
   @ExceptionHandler(Exception.class)

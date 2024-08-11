@@ -20,11 +20,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.DisableEncodeUrlFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import vn.tutor.core.security.JwtAuthenticationFilter;
+import vn.tutor.core.filter.JwtAuthenticationFilter;
+import vn.tutor.core.filter.RequestInfoFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -38,6 +40,7 @@ public class SecurityConfig {
   };
   private final UserDetailsService customUserDetailsService;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final RequestInfoFilter requestInfoFilter;
   private final HandlerExceptionResolver handlerExceptionResolver;
 
   @Bean
@@ -67,6 +70,7 @@ public class SecurityConfig {
         .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .maximumSessions(1));
     http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(requestInfoFilter, DisableEncodeUrlFilter.class);
     return http.build();
   }
 
