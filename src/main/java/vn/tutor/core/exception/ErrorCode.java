@@ -10,7 +10,8 @@ public enum ErrorCode {
   ERROR_001("TTE-001", "Invalid or missing credentials", HttpStatus.UNAUTHORIZED),
   ERROR_002("TTE-002", "Invalid or missing permission", HttpStatus.FORBIDDEN),
   ERROR_003("TTE-003", "Invalid payload data", HttpStatus.BAD_REQUEST),
-  ERROR_004("TTE-004", "Resource not found", HttpStatus.NOT_FOUND);
+  ERROR_004("TTE-004", "Resource not found", HttpStatus.NOT_FOUND),
+  ERROR_005("TTE-005", "Bad request", HttpStatus.BAD_REQUEST);
 
   private final String code;
   private final String message;
