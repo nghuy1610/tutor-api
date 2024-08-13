@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.tutor.core.common.Constant;
 import vn.tutor.core.dto.request.TutorReq;
 import vn.tutor.core.dto.response.TutorResp;
+import vn.tutor.core.security.CustomUserDetails;
 import vn.tutor.core.service.TutorService;
 import vn.tutor.core.validation.RequiredHeaders;
 
@@ -30,15 +31,15 @@ public class TutorController {
   @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<TutorResp>> getTutor(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
-      @AuthenticationPrincipal String userId) {
-    return () -> ResponseEntity.ok(tutorService.retrieveTutorByUserId(userId));
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    return () -> ResponseEntity.ok(tutorService.retrieveTutorByUserId(userDetails.userId()));
   }
 
   @PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<TutorResp>> updateTutor(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
       @RequestBody TutorReq tutorReq,
-      @AuthenticationPrincipal String userId) {
-    return () -> ResponseEntity.ok(tutorService.updateTutor(tutorReq, userId));
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    return () -> ResponseEntity.ok(tutorService.updateTutor(tutorReq, userDetails.userId()));
   }
 }

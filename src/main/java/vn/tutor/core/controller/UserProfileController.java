@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.tutor.core.common.Constant;
 import vn.tutor.core.dto.request.UserProfileReq;
 import vn.tutor.core.dto.response.UserProfileResp;
+import vn.tutor.core.security.CustomUserDetails;
 import vn.tutor.core.service.UserProfileService;
 import vn.tutor.core.validation.RequiredHeaders;
 
@@ -27,16 +28,16 @@ public class UserProfileController {
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<UserProfileResp>> retrieveCurrentUserProfile(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
-      @AuthenticationPrincipal String userId) {
-    return () -> ResponseEntity.ok(userProfileService.retrieveUserProfile(userId));
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    return () -> ResponseEntity.ok(userProfileService.retrieveUserProfile(userDetails.userId()));
   }
 
   @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<UserProfileResp>> updateCurrentUserProfile(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
       @RequestBody UserProfileReq userProfileReq,
-      @AuthenticationPrincipal String userId) {
-    return () -> ResponseEntity.ok(userProfileService.updateUserProfile(userId, userProfileReq));
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    return () -> ResponseEntity.ok(userProfileService.updateUserProfile(userDetails.userId(), userProfileReq));
   }
 
 }
