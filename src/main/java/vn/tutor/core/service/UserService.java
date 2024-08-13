@@ -1,9 +1,9 @@
 package vn.tutor.core.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +14,7 @@ import vn.tutor.core.dto.response.UserResp;
 import vn.tutor.core.entity.User;
 import vn.tutor.core.enums.UserType;
 import vn.tutor.core.repository.UserRepository;
+import vn.tutor.core.security.CustomUserDetails;
 import vn.tutor.core.security.JwtTokenInfo;
 import vn.tutor.core.security.JwtUtils;
 
@@ -63,11 +64,9 @@ public class UserService {
   }
 
   public LoginResp login(LoginReq loginReq) {
-    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.email(), loginReq.password()));
-    User user = userRepository.findFullUserByEmail(loginReq.email());
-    List<String> authorities = user.getUserPermissions().stream()
-        .map(up -> up.getPermission().getPermissionType().name()).toList();
-    return new LoginResp(jwtUtils.generateToken(new JwtTokenInfo(user.getId(), user.getEmail(), authorities)),
-        authorities);
+    Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.email(), loginReq.password()));
+    CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+    return new LoginResp(jwtUtils.generateToken(new JwtTokenInfo(userDetails.userId(), userDetails.email(), userDetails.authorities())),
+                         userDetails.authorities());
   }
 }
