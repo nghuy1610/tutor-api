@@ -1,5 +1,6 @@
 package vn.tutor.core.controller;
 
+import jakarta.validation.Valid;
 import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -38,7 +39,7 @@ public class TutorController {
   @PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<TutorResp>> updateTutor(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
-      @RequestBody TutorReq tutorReq,
+      @RequestBody @Valid TutorReq tutorReq,
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     return () -> ResponseEntity.ok(tutorService.updateTutor(tutorReq, userDetails.userId()));
   }
