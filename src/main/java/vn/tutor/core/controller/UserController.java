@@ -1,5 +1,6 @@
 package vn.tutor.core.controller;
 
+import jakarta.validation.Valid;
 import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -28,14 +29,14 @@ public class UserController {
   @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<UserResp>> registerUser(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
-      @RequestBody UserCreationReq requestDto) {
+      @RequestBody @Valid UserCreationReq requestDto) {
     return () -> ResponseEntity.ok(userService.createAndRetrieveNormalUser(requestDto));
   }
 
   @PostMapping(path = "login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<LoginResp>> login(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
-      @RequestBody LoginReq loginReq) {
+      @RequestBody @Valid LoginReq loginReq) {
     return () -> {
       LoginResp responseDto = userService.login(loginReq);
       return ResponseEntity.ok(responseDto);

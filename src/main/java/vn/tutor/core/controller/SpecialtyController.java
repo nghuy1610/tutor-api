@@ -1,5 +1,6 @@
 package vn.tutor.core.controller;
 
+import jakarta.validation.Valid;
 import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -38,7 +39,7 @@ public class SpecialtyController {
   @PostMapping(path = "/demands", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<SpecialtyDemandResp>> requestSpecialty(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
-      @RequestBody SpecialtyDemandReq req) {
+      @RequestBody @Valid SpecialtyDemandReq req) {
     return () -> ResponseEntity.ok(specialtyService.createNewSpecialtyRequest(req));
   }
 }

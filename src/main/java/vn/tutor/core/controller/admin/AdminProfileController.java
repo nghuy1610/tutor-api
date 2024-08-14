@@ -1,5 +1,6 @@
 package vn.tutor.core.controller.admin;
 
+import jakarta.validation.Valid;
 import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -43,7 +44,7 @@ public class AdminProfileController {
   public Callable<ResponseEntity<UserProfileResp>> updateUserProfile(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
       @PathVariable String id,
-      @RequestBody UserProfileReq profileReq) {
+      @RequestBody @Valid UserProfileReq profileReq) {
     return () -> ResponseEntity.ok(userProfileService.updateNormalUserProfile(id, profileReq));
   }
 

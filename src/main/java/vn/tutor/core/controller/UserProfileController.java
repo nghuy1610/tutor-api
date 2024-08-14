@@ -1,5 +1,6 @@
 package vn.tutor.core.controller;
 
+import jakarta.validation.Valid;
 import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +36,7 @@ public class UserProfileController {
   @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<UserProfileResp>> updateCurrentUserProfile(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
-      @RequestBody UserProfileReq userProfileReq,
+      @RequestBody @Valid UserProfileReq userProfileReq,
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     return () -> ResponseEntity.ok(userProfileService.updateUserProfile(userDetails.userId(), userProfileReq));
   }

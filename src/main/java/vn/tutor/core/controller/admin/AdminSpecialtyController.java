@@ -1,5 +1,6 @@
 package vn.tutor.core.controller.admin;
 
+import jakarta.validation.Valid;
 import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +36,7 @@ public class AdminSpecialtyController {
   @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public Callable<ResponseEntity<SpecialtyResp>> addSpecialty(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
-      @RequestBody SpecialtyReq specialty) {
+      @RequestBody @Valid SpecialtyReq specialty) {
     return () -> ResponseEntity.ok(specialtyService.createSpecialty(specialty));
   }
 
@@ -52,7 +53,7 @@ public class AdminSpecialtyController {
   public Callable<ResponseEntity<SpecialtyDemandResp>> updateSpecialtyDemand(
       @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
       @PathVariable String id,
-      @RequestBody SpecialtyDemandAssessmentReq request) {
+      @RequestBody @Valid SpecialtyDemandAssessmentReq request) {
     return () -> ResponseEntity.ok(specialtyService.updateSpecialtyDemand(id, request));
   }
 }
