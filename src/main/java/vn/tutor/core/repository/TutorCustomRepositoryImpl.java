@@ -30,6 +30,7 @@ public class TutorCustomRepositoryImpl implements TutorCustomRepository {
   public Page<Tutor> findTutorBySpecialtyIdsAndAddresses(List<String> specialtyIds, List<String> addresses, int pageNum,
                                                          int pageSize) {
     CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+    // Use a new root for each query (including sub query)
     CriteriaQuery<Tutor> retrievalQuery = cb.createQuery(Tutor.class);
     Root<Tutor> retrievalRoot = retrievalQuery.from(Tutor.class);
     Predicate retrievalPredicate = null;
@@ -69,6 +70,9 @@ public class TutorCustomRepositoryImpl implements TutorCustomRepository {
     }
 
     retrievalQuery.where(retrievalPredicate);
+    // Use entity graph to eagerly fetch related entities, join in where clause have no effect to fetching
+    // Eagerly fetch to avoid (n+1) queries problem
+    // Target a relation with both Root.fetch and Root.join in where clause results into duplication of join in the generated query
     EntityGraph<Tutor> entityGraph = entityManager.createEntityGraph(Tutor.class);
     Subgraph<TutorSpecialty> tutorSpecialtySubgraph = entityGraph.addSubgraph("tutorSpecialties");
     tutorSpecialtySubgraph.addSubgraph("specialty");
