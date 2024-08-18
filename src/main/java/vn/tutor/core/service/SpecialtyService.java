@@ -35,6 +35,10 @@ public class SpecialtyService {
     return new PagingResponse<>(specialtyRespList, pageSpecialty.getNumber(), pageSpecialty.getTotalPages(), pageSpecialty.getTotalElements());
   }
 
+  public List<SpecialtyResp> autoCompleteSpecialtyByName(String searchName) {
+    return specialtyRepository.findFirstTenByNameLikeOrderByUpdatedOnDesc(searchName).stream().map(SpecialtyResp::from).toList();
+  }
+
   public SpecialtyResp createSpecialty(SpecialtyReq specialtyReq) {
     return SpecialtyResp.from(specialtyRepository.save(Specialty.from(specialtyReq)));
   }

@@ -1,6 +1,7 @@
 package vn.tutor.core.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.concurrent.Callable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -34,6 +35,13 @@ public class SpecialtyController {
       @RequestParam(required = false, defaultValue = "0") int pageNum,
       @RequestParam(required = false, defaultValue = "10") int pageSize) {
     return () -> ResponseEntity.ok(specialtyService.retrieveAll(pageNum, pageSize));
+  }
+
+  @GetMapping(path = "/autocompletion", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Callable<ResponseEntity<List<SpecialtyResp>>> getSpecialties(
+      @RequestHeader @RequiredHeaders(headers = {Constant.X_CORRELATION_ID}) HttpHeaders headers,
+      @RequestParam String name) {
+    return () -> ResponseEntity.ok(specialtyService.autoCompleteSpecialtyByName(name));
   }
 
   @PostMapping(path = "/demands", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
