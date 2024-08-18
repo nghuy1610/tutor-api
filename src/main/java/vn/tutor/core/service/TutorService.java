@@ -40,7 +40,7 @@ public class TutorService {
 
   public PagingResponse<TutorResp> retrieveTutors(List<String> specialtyIds, List<String> addresses, int pageNum,
                                                   int pageSize) {
-    Page<Tutor> pageTutor = tutorRepository.findTutorBySpecialtiesAndAddresses(specialtyIds, addresses, pageNum, pageSize);
+    Page<Tutor> pageTutor = tutorRepository.findTutorBySpecialtyIdsAndAddresses(specialtyIds, addresses, pageNum, pageSize);
     List<TutorResp> tutorRespList = pageTutor.getContent().stream().map(TutorResp::from).toList();
     return new PagingResponse<>(tutorRespList, pageTutor.getNumber(), pageTutor.getTotalPages(), pageTutor.getTotalElements());
   }

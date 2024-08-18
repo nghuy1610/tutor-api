@@ -6,5 +6,5 @@ import vn.tutor.core.entity.Tutor;
 
 public interface TutorCustomRepository {
 
-  Page<Tutor> findTutorBySpecialtiesAndAddresses(List<String> specialties, List<String> addresses, int pageNum, int pageSize);
+  Page<Tutor> findTutorBySpecialtyIdsAndAddresses(List<String> specialties, List<String> addresses, int pageNum, int pageSize);
 }

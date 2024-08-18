@@ -27,8 +27,8 @@ public class TutorCustomRepositoryImpl implements TutorCustomRepository {
   private final EntityManager entityManager;
 
   @Override
-  public Page<Tutor> findTutorBySpecialtiesAndAddresses(List<String> specialtyIds, List<String> addresses, int pageNum,
-                                                        int pageSize) {
+  public Page<Tutor> findTutorBySpecialtyIdsAndAddresses(List<String> specialtyIds, List<String> addresses, int pageNum,
+                                                         int pageSize) {
     CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     CriteriaQuery<Tutor> retrievalQuery = cb.createQuery(Tutor.class);
     Root<Tutor> retrievalRoot = retrievalQuery.from(Tutor.class);
